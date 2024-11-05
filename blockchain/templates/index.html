@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Blockchain</title>
+</head>
+<body>
+    <h1>Mini Blockchain</h1>
+
+    <!-- Exibe o status de validade da blockchain -->
+    <h2>Status: {{ 'Válida' if valida else 'Inválida' }}</h2>
+
+    <!-- Formulário para adicionar um novo bloco -->
+    <h3>Adicionar Bloco</h3>
+    <form action="/adicionar_bloco" method="POST">
+        <label for="dados">Dados do Bloco:</label>
+        <input type="text" name="dados" id="dados" required>
+        <button type="submit">Adicionar Bloco</button>
+    </form>
+
+    <!-- Formulário para minerar o último bloco -->
+    <h3>Minerar Último Bloco</h3>
+    <form action="/minerar_bloco" method="POST">
+        <label for="dificuldade">Dificuldade:</label>
+        <input type="number" name="dificuldade" id="dificuldade" value="4" min="1">
+        <button type="submit">Minerar Bloco</button>
+    </form>
+
+    <!-- Exibe a blockchain -->
+    <h3>Blocos</h3>
+    <ul>
+        {% for bloco in blockchain %}
+            <li>
+                <strong>Bloco {{ bloco.indice }}</strong><br>
+                Dados: {{ bloco.dados }}<br>
+                Hash: {{ bloco.hash }}<br>
+                Hash Anterior: {{ bloco.hash_anterior }}<br>
+                Nonce: {{ bloco.nonce }}<br>
+                Timestamp: {{ bloco.timestamp }}<br>
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
