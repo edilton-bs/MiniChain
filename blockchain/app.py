@@ -4,6 +4,8 @@ from blockchain import Blockchain
 app = Flask(__name__)
 blockchain = Blockchain()
 
+
+
 @app.route('/')
 def index():
     # Exibe o estado atual da blockchain
@@ -29,4 +31,4 @@ def validar_blockchain():
     return render_template('index.html', blockchain=blockchain.cadeia, valida=valida)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
