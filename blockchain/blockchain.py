@@ -15,6 +15,14 @@ class Bloco:
         # Combina as informações do bloco para gerar um hash
         conteudo = f"{self.indice}{self.timestamp}{self.dados}{self.hash_anterior}{self.nonce}"
         return hashlib.sha256(conteudo.encode()).hexdigest()
+    
+    def atualizar_dados(self, dados):
+        self.dados = dados
+        self.hash = self.calcular_hash()
+
+    def atualizar_nonce(self, nonce):
+        self.nonce = nonce
+        self.hash = self.calcular_hash()
 
     def minerar_bloco(self, dificuldade):
         alvo = "0" * dificuldade  # Define o alvo com base na dificuldade

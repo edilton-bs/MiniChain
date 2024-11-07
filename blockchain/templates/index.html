@@ -2,45 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Blockchain</title>
 </head>
 <body>
     <h1>Mini Blockchain</h1>
 
-    <!-- Exibe o status de validade da blockchain -->
-    <h2>Status: {{ 'Válida' if valida else 'Inválida' }}</h2>
+    <!-- Div para exibir a blockchain -->
+    <div id="blockchain" align="center">
+        <!-- Os blocos serão carregados aqui -->
+    </div>
+
+    <script>
+        let debounceTimeout;
+
+        function criarBlocoGenesis() {
+            fetch('/criar_bloco_genesis', {
+                method: 'POST'
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    carregarBlockchain();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function adicionarBloco() {
+            const dados = document.getElementById('novo-dado').value;
+            fetch('/adicionar_bloco', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({dados})
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    carregarBlockchain();
+                    document.getElementById('novo-dado').value = '';
+                }
+            });
+        }
+
+        function atualizarDados(indice) {
+            const dados = document.getElementById(`dados-${indice}`).value;
+
+            // Limpa o timeout anterior
+            clearTimeout(debounceTimeout);
+
+            // Define um novo timeout
+            debounceTimeout = setTimeout(() => {
+                fetch('/atualizar_dados', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({indice, dados})
+                }).then(response => response.json()).then(data => {
+                    carregarBlockchain();
+                });
+            }, 300); // Espera 300ms após a última digitação para atualizar
+        }
+
+        function atualizarNonce(indice) {
+            const nonce = document.getElementById(`nonce-${indice}`).value;
+
+            // Limpa o timeout anterior
+            clearTimeout(debounceTimeout);
+
+            // Define um novo timeout
+            debounceTimeout = setTimeout(() => {
+                fetch('/atualizar_nonce', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({indice, nonce})
+                }).then(response => response.json()).then(data => {
+                    carregarBlockchain();
+                });
+            }, 300); // Espera 300ms após a última digitação para atualizar
+        }
+
+        function minerarBloco(indice) {
+            fetch('/minerar_bloco', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({indice})
+            }).then(response => response.json()).then(data => {
+                carregarBlockchain();
+            });
+        }
+
+        function carregarBlockchain() {
+            fetch('/get_blockchain').then(response => response.json()).then(data => {
+                const blockchainDiv = document.getElementById('blockchain');
+                blockchainDiv.innerHTML = '';  // Limpa a div antes de adicionar os blocos
+
+                data.forEach(bloco => {
+                    const blocoDiv = document.createElement('div');
+                    blocoDiv.innerHTML = `
+                        <h3>Block #${bloco.indice}</h3>
+                        <label>Data:</label>
+                        <input type="text" id="dados-${bloco.indice}" value="${bloco.dados}" oninput="atualizarDados(${bloco.indice})">
+                        <br>
+                        <label>Previous Hash:</label>
+                        <input type="text" id="previous-hash-${bloco.indice}" value="${bloco.hash_anterior}" readonly>
+                        <br>
+                        <label>Hash:</label>
+                        <input type="text" id="hash-${bloco.indice}" value="${bloco.hash}" readonly>
+                        <br>
+                        <label>Nonce:</label>
+                        <input type="number" id="nonce-${bloco.indice}" value="${bloco.nonce}" oninput="atualizarNonce(${bloco.indice})">
+                        <button onclick="minerarBloco(${bloco.indice})">Mine Block</button>
+                        <hr>
+                    `;
+                    blockchainDiv.appendChild(blocoDiv);
+                });
+            });
+        }
+
+        // Carregar a blockchain ao iniciar
+        window.onload = carregarBlockchain;
+    </script>
 
     <!-- Formulário para adicionar um novo bloco -->
-    <h3>Adicionar Bloco</h3>
-    <form action="/adicionar_bloco" method="POST">
-        <label for="dados">Dados do Bloco:</label>
-        <input type="text" name="dados" id="dados" required>
-        <button type="submit">Adicionar Bloco</button>
-    </form>
+    <div align="center">
+        <input type="text" id="novo-dado" placeholder="Dados do novo bloco">
+        <button onclick="adicionarBloco()">Adicionar Novo Bloco</button>
+    </div>
 
-    <!-- Formulário para minerar o último bloco -->
-    <h3>Minerar Último Bloco</h3>
-    <form action="/minerar_bloco" method="POST">
-        <label for="dificuldade">Dificuldade:</label>
-        <input type="number" name="dificuldade" id="dificuldade" value="4" min="1">
-        <button type="submit">Minerar Bloco</button>
-    </form>
-
-    <!-- Exibe a blockchain -->
-    <h3>Blocos</h3>
-    <ul>
-        {% for bloco in blockchain %}
-            <li>
-                <strong>Bloco {{ bloco.indice }}</strong><br>
-                Dados: {{ bloco.dados }}<br>
-                Hash: {{ bloco.hash }}<br>
-                Hash Anterior: {{ bloco.hash_anterior }}<br>
-                Nonce: {{ bloco.nonce }}<br>
-                Timestamp: {{ bloco.timestamp }}<br>
-                <hr>
-            </li>
-        {% endfor %}
-    </ul>
 </body>
 </html>
