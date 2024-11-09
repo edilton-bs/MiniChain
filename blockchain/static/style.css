@@ -51,6 +51,12 @@ h1 {
     box-sizing: border-box;
 }
 
+/* Estilo para blocos inválidos */
+.invalid {
+    background-color: #ffdddd;
+    border-color: #ff5555;
+}
+
 .block button {
     background-color: #4CAF50;
     color: white;

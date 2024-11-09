@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Mini Blockchain</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <h1>Mini Blockchain</h1>
 
     <!-- Div para exibir a blockchain -->
-    <div id="blockchain" >
+    <div id="blockchain">
         <!-- Os blocos serão carregados aqui -->
+    </div>
+
+    <!-- Formulário para adicionar um novo bloco -->
+    <div id="new-block-form">
+        <input type="text" id="novo-dado" placeholder="Dados do novo bloco">
+        <button onclick="adicionarBloco()">Adicionar Novo Bloco</button>
     </div>
 
     <script>
@@ -46,10 +52,8 @@
         function atualizarDados(indice) {
             const dados = document.getElementById(`dados-${indice}`).value;
 
-            // Limpa o timeout anterior
             clearTimeout(debounceTimeout);
 
-            // Define um novo timeout
             debounceTimeout = setTimeout(() => {
                 fetch('/atualizar_dados', {
                     method: 'POST',
@@ -58,16 +62,14 @@
                 }).then(response => response.json()).then(data => {
                     carregarBlockchain();
                 });
-            }, 300); // Espera 300ms após a última digitação para atualizar
+            }, 300);
         }
 
         function atualizarNonce(indice) {
             const nonce = document.getElementById(`nonce-${indice}`).value;
 
-            // Limpa o timeout anterior
             clearTimeout(debounceTimeout);
 
-            // Define um novo timeout
             debounceTimeout = setTimeout(() => {
                 fetch('/atualizar_nonce', {
                     method: 'POST',
@@ -76,7 +78,7 @@
                 }).then(response => response.json()).then(data => {
                     carregarBlockchain();
                 });
-            }, 300); // Espera 300ms após a última digitação para atualizar
+            }, 300);
         }
 
         function minerarBloco(indice) {
@@ -94,9 +96,18 @@
                 const blockchainDiv = document.getElementById('blockchain');
                 blockchainDiv.innerHTML = '';  // Limpa a div antes de adicionar os blocos
 
+                let invalidChain = false;  // Flag para marcar a cadeia inválida
+
                 data.forEach(bloco => {
                     const blocoDiv = document.createElement('div');
-                    blocoDiv.className = 'block';  // Adiciona a classe "block" para estilização
+                    blocoDiv.className = 'block';
+
+                    // Verifica se o hash do bloco é válido (começa com "0000")
+                    if (invalidChain || !bloco.hash.startsWith("0000")) {
+                        blocoDiv.classList.add('invalid');
+                        invalidChain = true;  // Marca todos os blocos seguintes como inválidos
+                    }
+
                     blocoDiv.innerHTML = `
                         <h3>Bloco #${bloco.indice}</h3>
                         <label>Dados:</label>
@@ -110,7 +121,7 @@
                         <br>
                         <label>Nonce:</label>
                         <input type="number" id="nonce-${bloco.indice}" value="${bloco.nonce}" oninput="atualizarNonce(${bloco.indice})">
-                        <button onclick="minerarBloco(${bloco.indice})">Minerar bloco</button>
+                        <button onclick="minerarBloco(${bloco.indice})">Mine Block</button>
                     `;
                     blockchainDiv.appendChild(blocoDiv);
                 });
@@ -120,12 +131,5 @@
         // Carregar a blockchain ao iniciar
         window.onload = carregarBlockchain;
     </script>
-
-    <!-- Formulário para adicionar um novo bloco -->
-    <div align="center">
-        <input type="text" id="novo-dado" placeholder="Dados do novo bloco">
-        <button onclick="adicionarBloco()">Adicionar Novo Bloco</button>
-    </div>
-
 </body>
 </html>
