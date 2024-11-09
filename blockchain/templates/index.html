@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Mini Blockchain</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
     <h1>Mini Blockchain</h1>
 
     <!-- Div para exibir a blockchain -->
-    <div id="blockchain" align="center">
+    <div id="blockchain" >
         <!-- Os blocos serão carregados aqui -->
     </div>
 
@@ -94,12 +96,13 @@
 
                 data.forEach(bloco => {
                     const blocoDiv = document.createElement('div');
+                    blocoDiv.className = 'block';  // Adiciona a classe "block" para estilização
                     blocoDiv.innerHTML = `
-                        <h3>Block #${bloco.indice}</h3>
-                        <label>Data:</label>
+                        <h3>Bloco #${bloco.indice}</h3>
+                        <label>Dados:</label>
                         <input type="text" id="dados-${bloco.indice}" value="${bloco.dados}" oninput="atualizarDados(${bloco.indice})">
                         <br>
-                        <label>Previous Hash:</label>
+                        <label>Hash anterior:</label>
                         <input type="text" id="previous-hash-${bloco.indice}" value="${bloco.hash_anterior}" readonly>
                         <br>
                         <label>Hash:</label>
@@ -107,8 +110,7 @@
                         <br>
                         <label>Nonce:</label>
                         <input type="number" id="nonce-${bloco.indice}" value="${bloco.nonce}" oninput="atualizarNonce(${bloco.indice})">
-                        <button onclick="minerarBloco(${bloco.indice})">Mine Block</button>
-                        <hr>
+                        <button onclick="minerarBloco(${bloco.indice})">Minerar bloco</button>
                     `;
                     blockchainDiv.appendChild(blocoDiv);
                 });
