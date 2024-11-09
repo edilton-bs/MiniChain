@@ -13,7 +13,7 @@
     <div id="blockchain">
         <!-- Os blocos serão carregados aqui -->
     </div>
-
+    <br><br>
     <!-- Formulário para adicionar um novo bloco -->
     <div id="new-block-form">
         <input type="text" id="novo-dado" placeholder="Dados do novo bloco">
@@ -98,7 +98,7 @@
 
                 let invalidChain = false;  // Flag para marcar a cadeia inválida
 
-                data.forEach(bloco => {
+                data.forEach((bloco, index) => {
                     const blocoDiv = document.createElement('div');
                     blocoDiv.className = 'block';
 
@@ -109,11 +109,11 @@
                     }
 
                     blocoDiv.innerHTML = `
-                        <h3>Bloco #${bloco.indice}</h3>
-                        <label>Dados:</label>
+                        <h3>Block #${bloco.indice}</h3>
+                        <label>Data:</label>
                         <input type="text" id="dados-${bloco.indice}" value="${bloco.dados}" oninput="atualizarDados(${bloco.indice})">
                         <br>
-                        <label>Hash anterior:</label>
+                        <label>Previous Hash:</label>
                         <input type="text" id="previous-hash-${bloco.indice}" value="${bloco.hash_anterior}" readonly>
                         <br>
                         <label>Hash:</label>
@@ -121,9 +121,16 @@
                         <br>
                         <label>Nonce:</label>
                         <input type="number" id="nonce-${bloco.indice}" value="${bloco.nonce}" oninput="atualizarNonce(${bloco.indice})">
-                        <button onclick="minerarBloco(${bloco.indice})">Minerar bloco</button>
+                        <button onclick="minerarBloco(${bloco.indice})">Mine Block</button>
                     `;
                     blockchainDiv.appendChild(blocoDiv);
+
+                    // Adiciona uma linha de conexão, exceto após o último bloco
+                    if (index < data.length - 1) {
+                        const lineDiv = document.createElement('div');
+                        lineDiv.className = 'line';
+                        blockchainDiv.appendChild(lineDiv);
+                    }
                 });
             });
         }
