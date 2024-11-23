@@ -2,12 +2,18 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
+}
+
+
+#blockchain-container {
+    max-width: 600px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0;
     padding: 20px;
 }
+
 
 /* Estilo para a linha de conexão */
 .line {
@@ -25,6 +31,11 @@ h1 {
 #blockchain {
     max-width: 600px;
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
 }
 
 /* Estilo para os blocos */
@@ -32,10 +43,12 @@ h1 {
     background-color: #d0ebec;
     border: 0px solid #131111;
     border-radius: 8px;
+    align-items: left;
     padding: 15px;
     margin-bottom: 0px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
+    
 }
 
 .block h3 {
@@ -106,4 +119,32 @@ hr {
     border: none;
     border-top: 1px solid #eee;
     margin: 20px 0;
+}
+
+
+#texto {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+#texto:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    outline: none;
+}
+
+.output {
+    font-family: monospace;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    color: #333;
+    word-wrap: break-word;
 }

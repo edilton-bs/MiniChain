@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from blockchain import Blockchain
+import hashlib
 
 app = Flask(__name__)
 blockchain = Blockchain()
@@ -7,6 +8,10 @@ blockchain = Blockchain()
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/sha256')
+def sha256_page():
+    return render_template('sha256.html')
 
 @app.route('/get_blockchain', methods=['GET'])
 def get_blockchain():
@@ -65,6 +70,12 @@ def minerar_bloco():
     blockchain.cadeia[indice].minerar_bloco(dificuldade)
     repropagar_hashes(indice)
     return jsonify({"hash": blockchain.cadeia[indice].hash, "nonce": blockchain.cadeia[indice].nonce})
+
+@app.route('/sha256_converter', methods=['POST'])
+def sha256_converter():
+    texto = request.json.get('texto', '')
+    hash_result = hashlib.sha256(texto.encode()).hexdigest()
+    return jsonify({"hash": hash_result})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

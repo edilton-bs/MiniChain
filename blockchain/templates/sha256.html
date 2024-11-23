@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHA-256 Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Estilização básica para a navbar */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+            color: white;
+        }
+
+        #content {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/">Blockchain</a>
+        <a href="/sha256">SHA-256</a>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="blockchain-container">
+        <h1>SHA-256 Converter</h1>
+        <p>Digite o texto para converter para SHA-256:</p>
+        <input type="text" id="texto" placeholder="Digite algo..." oninput="converterSHA256()">
+        <div class="output" id="resultado">O hash SHA-256 aparecerá aqui.</div>
+    </div>
+
+    <script>
+        async function converterSHA256() {
+            const texto = document.getElementById('texto').value;
+            if (texto.trim() === "") {
+                document.getElementById('resultado').textContent = "O hash SHA-256 aparecerá aqui.";
+                return;
+            }
+
+            const response = await fetch('/sha256_converter', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({texto})
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('resultado').textContent = data.hash;
+            } else {
+                document.getElementById('resultado').textContent = "Erro ao calcular o hash.";
+            }
+        }
+    </script>
+</body>
+</html>

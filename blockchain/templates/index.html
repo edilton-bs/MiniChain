@@ -4,21 +4,60 @@
     <meta charset="UTF-8">
     <title>Mini Blockchain</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* Estilização básica para a navbar */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+            color: white;
+        }
+
+        #content {
+            padding: 20px;
+        }
+    </style>
+
 </head>
 
 <body>
-    <h1>Mini Blockchain</h1>
 
-    <!-- Div para exibir a blockchain -->
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/">Blockchain</a>
+        <a href="/sha256">SHA-256</a>
+    </div>
+
+
+    <!-- Conteúdo principal -->
+
+   <!-- Container para a blockchain -->
+   <div id="blockchain-container">
     <div id="blockchain">
         <!-- Os blocos serão carregados aqui -->
     </div>
-    <br><br>
+
     <!-- Formulário para adicionar um novo bloco -->
     <div id="new-block-form">
         <input type="text" id="novo-dado" placeholder="Dados do novo bloco">
         <button onclick="adicionarBloco()">Adicionar novo bloco</button>
     </div>
+</div>
 
     <script>
         let debounceTimeout;
