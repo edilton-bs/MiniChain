@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre o site</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sobre o site</h1>
+        <p>Este site foi desenvolvido como parte de um trabalho computacional para a disciplina de Álgebra e Criptografia, ministrada na FGV-EMAp.</p>
+        <p>Alunos responsáveis:</p>
+        <ul>
+            <li>Edilton Brandão</li>
+            <li>Sofia Lakschevitz</li>
+        </ul>
+        <p>O site demonstra conceitos de blockchain e hashing criptográfico (SHA-256), destacando a importância dessas tecnologias no contexto moderno de segurança digital.</p>
+        <p><a href="/">Voltar à página principal</a></p>
+    </div>
+</body>
+</html>

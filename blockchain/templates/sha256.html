@@ -28,8 +28,93 @@
             color: white;
         }
 
-        #content {
-            padding: 20px;
+        .navbar svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            margin-right: 5px;
+        }
+
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .blockchain-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        #texto {
+            width: calc(100% - 40px);
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+            outline: none;
+        }
+
+        #texto:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+        }
+
+        .output {
+            font-family: monospace;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            color: #333;
+            word-wrap: break-word;
+            margin-top: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .output-placeholder {
+            color: #aaa;
+        }
+
+        /* Botão estilizado */
+        .convert-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease-in-out;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .convert-button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -39,6 +124,11 @@
     <div class="navbar">
         <a href="/">Blockchain</a>
         <a href="/sha256">SHA-256</a>
+        <a href="/info" title="Sobre o site">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v-6h-2v6zm0-8h2V7h-2v1z"/>
+            </svg>
+        </a>
     </div>
 
     <!-- Conteúdo principal -->
@@ -46,28 +136,37 @@
         <h1>SHA-256 Converter</h1>
         <p>Digite o texto para converter para SHA-256:</p>
         <input type="text" id="texto" placeholder="Digite algo..." oninput="converterSHA256()">
-        <div class="output" id="resultado">O hash SHA-256 aparecerá aqui.</div>
+        <!--<button class="convert-button" onclick="converterSHA256()">Converter</button>-->
+        <div class="output" id="resultado">
+            <span class="output-placeholder">O hash SHA-256 aparecerá aqui.</span>
+        </div>
     </div>
 
     <script>
         async function converterSHA256() {
             const texto = document.getElementById('texto').value;
+            const resultado = document.getElementById('resultado');
+
             if (texto.trim() === "") {
-                document.getElementById('resultado').textContent = "O hash SHA-256 aparecerá aqui.";
+                resultado.innerHTML = '<span class="output-placeholder">O hash SHA-256 aparecerá aqui.</span>';
                 return;
             }
 
-            const response = await fetch('/sha256_converter', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({texto})
-            });
+            try {
+                const response = await fetch('/sha256_converter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ texto })
+                });
 
-            if (response.ok) {
-                const data = await response.json();
-                document.getElementById('resultado').textContent = data.hash;
-            } else {
-                document.getElementById('resultado').textContent = "Erro ao calcular o hash.";
+                if (response.ok) {
+                    const data = await response.json();
+                    resultado.textContent = data.hash;
+                } else {
+                    resultado.innerHTML = '<span class="output-placeholder">Erro ao calcular o hash.</span>';
+                }
+            } catch (error) {
+                resultado.innerHTML = '<span class="output-placeholder">Erro de conexão. Tente novamente.</span>';
             }
         }
     </script>

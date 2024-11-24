@@ -13,6 +13,11 @@ def index():
 def sha256_page():
     return render_template('sha256.html')
 
+@app.route('/info')
+def info():
+    return render_template('info.html')
+
+
 @app.route('/get_blockchain', methods=['GET'])
 def get_blockchain():
     # Converte cada bloco em um dicionário para facilitar o envio como JSON
