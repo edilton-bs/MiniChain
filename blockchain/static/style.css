@@ -96,7 +96,18 @@ h1 {
 }
 
 /* Estilo para o formulário de adicionar novo bloco */
-#novo-dado,
+    #novo-dado {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+            outline: none;
+        }
+
+
 button {
     margin-top: 10px;
     padding: 10px;
